@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WatchTogether</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<!-- ===== Landing ===== -->
+<section id="landing" class="landing">
+  <div class="card">
+    <h1>🎬 WatchTogether</h1>
+    <p class="muted" id="landingText">Watch videos in sync with your friends, with voice and chat.</p>
+    <label class="field">Your name
+      <input id="nameInput" maxlength="30" placeholder="e.g. Ali" autocomplete="nickname">
+    </label>
+    <button id="createBtn" class="primary big">Create a room</button>
+    <div class="or" id="orRow"><span>or join with a code</span></div>
+    <div class="row" id="joinRow">
+      <input id="codeInput" placeholder="Room code or invite link">
+      <button id="joinBtn">Join</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Room ===== -->
+<section id="room" class="room hidden">
+  <header class="topbar">
+    <div class="brand">🎬 <span class="muted">Room</span> <b id="roomName"></b></div>
+    <div class="actions">
+      <button id="copyBtn">🔗 Invite</button>
+      <button id="micBtn">🎤 Join voice</button>
+      <button id="leaveBtn" class="danger">Leave</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="stage">
+      <div class="player">
+        <div id="placeholder" class="placeholder">
+          <div>
+            <div class="big-emoji">🍿</div>
+            Nothing is playing yet.<br>
+            <span class="muted">Choose a video below — everyone in the room will see it.</span>
+          </div>
+        </div>
+        <div id="ytWrap" class="fill hidden"><div id="yt"></div></div>
+        <video id="video" class="fill hidden" controls playsinline></video>
+        <video id="streamVideo" class="fill hidden" controls playsinline autoplay></video>
+        <div id="localPrompt" class="overlay hidden">
+          <p id="localPromptText"></p>
+          <label class="button primary">📁 Choose my copy
+            <input type="file" id="localPromptFile" accept="video/*,audio/*" hidden>
+          </label>
+        </div>
+      </div>
+
+      <div class="nowbar">
+        <span id="nowText" class="muted">Nothing playing</span>
+        <button id="resyncBtn" class="small" title="Jump to where everyone else is">⟳ Re-sync</button>
+      </div>
+
+      <div class="sources">
+        <div class="tabs">
+          <button data-tab="yt" class="active">▶ YouTube</button>
+          <button data-tab="url">🌐 Web link</button>
+          <button data-tab="local">📁 Same file</button>
+          <button data-tab="stream">📡 Stream</button>
+        </div>
+
+        <div class="tab" id="tab-yt">
+          <div class="row">
+            <input id="ytInput" placeholder="Paste a YouTube link">
+            <button id="ytBtn" class="primary">Play for everyone</button>
+          </div>
+        </div>
+
+        <div class="tab hidden" id="tab-url">
+          <div class="row">
+            <input id="urlInput" placeholder="Direct video link (ending in .mp4 or .webm)">
+            <button id="urlBtn" class="primary">Play for everyone</button>
+          </div>
+          <p class="hint">Must be a direct link to the video file and start with https://.</p>
+        </div>
+
+        <div class="tab hidden" id="tab-local">
+          <label class="button primary">📁 Choose a video from my device
+            <input type="file" id="localFile" accept="video/*,audio/*" hidden>
+          </label>
+          <p class="hint">Best quality. Everyone needs their own copy of the same file — the site only syncs play, pause and seeking.</p>
+        </div>
+
+        <div class="tab hidden" id="tab-stream">
+          <div class="row wrap">
+            <label class="button primary" id="streamFileLabel">🎞 Stream a file from my device
+              <input type="file" id="streamFile" accept="video/*,audio/*" hidden>
+            </label>
+            <button id="screenBtn">🖥 Share a screen or tab</button>
+            <button id="stopStreamBtn" class="danger hidden">⏹ Stop streaming</button>
+          </div>
+          <p class="hint">Your friends don't need the file — it's sent from your device, so quality depends on your upload speed. Works best in Chrome or Edge on a computer.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="panel">
+        <h3>People <span class="pill" id="count">0</span></h3>
+        <ul id="people" class="people"></ul>
+      </div>
+      <div class="panel chat">
+        <h3>Chat</h3>
+        <div id="messages" class="messages"></div>
+        <form id="chatForm" class="row">
+          <input id="chatInput" maxlength="500" placeholder="Say something…" autocomplete="off">
+          <button class="primary">Send</button>
+        </form>
+      </div>
+    </aside>
+  </main>
+</section>
+
+<div id="audios" hidden></div>
+<div id="toast" class="toast"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
